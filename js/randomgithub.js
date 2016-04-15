@@ -87,5 +87,6 @@
 
   $('.clear').on('click', function clearStorage() {
     localStorage.clear();
+    $('.contributors ul').empty();
   });
 })();
