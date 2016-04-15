@@ -2,12 +2,16 @@
   'use strict';
 
   function loadPreviousUsers(userObject) {
-    var users = JSON.parse(userObject);
-    var userKeys = Object.keys(users);
-    userKeys.forEach(function add(each) {
-      var contributor = { login: users[each].login, avatar: users[each].avatar_url };
-      addAuthorToUI(contributor);
-    });
+    try {
+      var storedUsers = JSON.parse(userObject);
+      var userKeys = Object.keys(storedUsers);
+      userKeys.forEach(function addStoredUsers(each) {
+        var contributor = { login: storedUsers[each].login, avatar: storedUsers[each].avatar_url };
+        addAuthorToUI(contributor);
+      });
+    } catch (err) {
+      return;
+    }
   }
 
   loadPreviousUsers(localStorage.userList);
@@ -68,7 +72,7 @@
   var users = {};
 
   function addAuthorToStorage(authorID, login, avatar) {
-    users[contributor.authorid] = { login: contributor.login, avatar_url: contributor.avatar};
+    users[authorID] = { login: login, avatar_url: avatar};
     localStorage.setItem('userList', JSON.stringify(users));
   }
 
@@ -85,8 +89,9 @@
       );
   }
 
-  $('.clear').on('click', function clearStorage() {
+  $('.clear').on('click', function clearStorage(event) {
+    event.preventDefault();
     localStorage.clear();
-    $('.contributors ul').empty();
+    $('#contributors ul').empty();
   });
 })();
